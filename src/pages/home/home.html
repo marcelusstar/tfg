@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <!--
+  <h2>Lista de usuarios</h2>
+  <ion-list>
+    <ion-item *ngFor="let usuario of usuarios">
+      {{usuario.alias}}
+    </ion-item>
+  </ion-list>
+  -->
+  <h2>Add User</h2>
+  <form (ngSubmit)="newUsuario()">
+
+    <ion-item>
+      <ion-label>Nombre</ion-label>
+      <ion-input type="text" [(ngModel)]="usuario.nombre" name="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Apellidos</ion-label>
+      <ion-input type="text" [(ngModel)]="usuario.apellidos" name="apellidos"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Username</ion-label>
+      <ion-input type="text" [(ngModel)]="usuario.alias" name="alias"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Contrasena</ion-label>
+      <ion-input type="password" [(ngModel)]="usuario.contrasena" name="contrasena"></ion-input>
+    </ion-item>
+
+    <ion-item-divider color="light">Organizacion</ion-item-divider>
+
+    <ion-select>
+      <ion-label>Organizacion</ion-label>
+      <ion-option *ngFor="let usuario of usuarios" value="{{usuario.alias}}">{{usuario.alias}}</ion-option>
+    </ion-select>
+
+<!--
+    <ion-list>
+      <ion-item ng-repeat="let usuario of usuarios" usuario="usuario">
+        <ion-label>Toppings</ion-label>
+        <ion-select [(ngModel)]="usuario.alias" multiple="true">
+            <ion-option>{{ usuario.alias }}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+
+  <ion-item>
+    <ion-label>Toppings</ion-label>
+    <ion-select [(ngModel)]="toppings2"  multiple="true" >
+      <ion-option>Bacon</ion-option>
+      <ion-option>Black Olives</ion-option>
+      <ion-option>Extra Cheese</ion-option>
+      <ion-option>Mushrooms</ion-option>
+      <ion-option>Pepperoni</ion-option>
+      <ion-option>Sausage</ion-option>
+    </ion-select>
+  </ion-item>
+-->  
+
+    <button ion-button type="submit" block>Nuevo usuario</button>
+
+  </form>
+</ion-content>
