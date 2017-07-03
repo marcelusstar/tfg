@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ApiService } from '../../providers/api-service';
+import { UserService } from '../../providers/user-service';
 
 @Component({
   selector: 'page-home',
@@ -21,14 +21,14 @@ export class HomePage {
   MyArrayType = {id: '', seleccionado: ''};
   toppings2 : any;
 
-  constructor(public navCtrl: NavController, public apiService: ApiService)
+  constructor(public navCtrl: NavController, public userService: UserService)
   {
       this.usuarios = this.getUsuarios();
   }
 
   getUsuarios()
   {
-    this.apiService.getUsuarios().then(data =>
+    this.userService.getUsuarios().then(data =>
     {
       this.usuarios = data;
       console.log(this.usuarios);
@@ -37,7 +37,7 @@ export class HomePage {
 
   newUsuario()
   {
-    this.apiService.newUsuario(this.usuario).then((result) =>
+    this.userService.newUsuario(this.usuario).then((result) =>
     {
       console.log(result);
     },

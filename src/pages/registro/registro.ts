@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, IonicPage } from 'ionic-angular';
-import { ApiService } from '../../providers/api-service';
+import { UserService } from '../../providers/user-service';
 
 @IonicPage()
 @Component({
@@ -9,6 +9,8 @@ import { ApiService } from '../../providers/api-service';
 })
 export class RegistroPage
 {
+  organizacionesSeleccionadas: string[] = [];
+  organizaciones: any;
   usuario =
   {
     alias: '',
@@ -20,32 +22,45 @@ export class RegistroPage
 
   constructor(
               private nav: NavController,
-              private apiService: ApiService,
+              private userService: UserService,
               private alertCtrl: AlertController)
   {
-
+    this.getOrganizaciones();
   }
 
   public newUsuario()
   {
-    this.apiService.newUsuario(this.usuario).then((result) =>
+    if (this.organizacionesSeleccionadas.length > 0)
     {
-      if (result != JSON.stringify({}))
+      this.userService.newUsuario(this.usuario).then((result) =>
       {
-        this.cuentaCreada = true;
-        this.showPopup("Exito", "Cuenta creada.");
-      }
-      else
+        if (result != JSON.stringify({}))
+        {
+          this.cuentaCreada = true;
+          this.showPopup("Exito", "Cuenta creada.");
+
+          for(var i in this.organizacionesSeleccionadas)
+          {
+               console.log(this.organizacionesSeleccionadas[i]);
+               this.addUsuarioAOrganizacion(this.usuario.alias, this.organizacionesSeleccionadas[i]);
+          }
+        }
+        else
+        {
+            this.showPopup("Error", "Ha ocurrido un problema mientras se creaba la cuenta");
+        }
+        console.log(result);
+      },
+      (err) =>
       {
-          this.showPopup("Error", "Ha ocurrido un problema mientras se creaba la cuenta");
-      }
-      console.log(result);
-    },
-    (err) =>
+        this.showPopup("Error con la conexion, vuelva a intentarlo mas tarde", err);
+        console.log(err);
+      });
+    }
+    else
     {
-      this.showPopup("Error con la conexion, vuelva a intentarlo mas tarde", err);
-      console.log(err);
-    });
+      this.showPopup("Error", "Necesita elegir al menos una organización");
+    }
   }
 
   showPopup(title, text)
@@ -71,4 +86,43 @@ export class RegistroPage
 
     alert.present();
   }
+
+// -----------------------------------------------------------------------------
+
+  getOrganizaciones()
+  {
+    this.userService.getOrganizaciones().then(organizaciones =>
+    {
+      this.organizaciones = organizaciones;
+      console.log(this.organizaciones);
+    });
+  }
+
+// -----------------------------------------------------------------------------
+
+  addUsuarioAOrganizacion(alias_usuario, id_org)
+  {
+    var datos;
+
+    datos = { alias: alias_usuario, id_organizacion: id_org};
+
+    this.userService.addUsuarioAOrganizacion(datos).then(result =>
+    {
+      if (result != JSON.stringify({}))
+      {
+        console.log(datos);
+      }
+      else
+      {
+          this.showPopup("Error", "Ha ocurrido un problema mientras se asociaba la cuenta creada a la organizacion de id: "+id_org);
+      }
+      console.log(result);
+    },
+    (err) =>
+    {
+      this.showPopup("Error con la conexion, vuelva a intentarlo mas tarde", err);
+      console.log(err);
+    });
+  }
+
 }

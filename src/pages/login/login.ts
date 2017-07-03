@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, Loading, IonicPage } from 'ionic-angular';
-import { ApiService } from '../../providers/api-service';
+import { UserService } from '../../providers/user-service';
 
 @IonicPage()
 @Component({
@@ -14,10 +14,11 @@ export class LoginPage
 
   constructor(
               private nav: NavController,
-              private apiService: ApiService,
+              private userService: UserService,
               private alertCtrl: AlertController,
               private loadingCtrl: LoadingController)
   {
+
   }
 
 // -----------------------------------------------------------------------------
@@ -32,7 +33,7 @@ export class LoginPage
   public loginUsuario(usuario)
   {
     this.showLoading();
-    this.apiService.loginUsuario(this.usuario).then((result)=>
+    this.userService.loginUsuario(this.usuario).then((result)=>
     {
       if (JSON.stringify(result) != JSON.stringify([]))
       {

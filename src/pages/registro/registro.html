@@ -41,6 +41,16 @@
             <ion-label>Contrasena</ion-label>
             <ion-input type="password" [(ngModel)]="usuario.contrasena" name="contrasena" required></ion-input>
           </ion-item>
+
+          <ion-item>
+            <ion-label>Organizaciones</ion-label>
+            <ion-select [(ngModel)]="organizacionesSeleccionadas" name="algo" multiple="true" cancelText="No!" okText="Okay!">
+              <ion-option *ngFor="let organizacion of organizaciones" [value]="organizacion.id" required>{{organizacion.nombre}}</ion-option>
+            </ion-select>
+         </ion-item>
+
+         <ion-label> Organizaciones seleccionadas: {{organizacionesSeleccionadas}} </ion-label>
+
         </ion-list>
       </ion-col>
     </ion-row>

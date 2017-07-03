@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ApiService } from '../providers/api-service';
+import { UserService } from '../providers/user-service';
 import { ProyectoService } from '../providers/proyecto-service';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { ProyectoService } from '../providers/proyecto-service';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiService,
+    UserService,
     ProyectoService,
   ]
 })
