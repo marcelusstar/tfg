@@ -9,6 +9,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { UserService } from '../providers/user-service';
 import { ProyectoService } from '../providers/proyecto-service';
+import { IdeaService } from '../providers/idea-service';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ProyectoService } from '../providers/proyecto-service';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserService,
     ProyectoService,
+    IdeaService
   ]
 })
 export class AppModule {}
