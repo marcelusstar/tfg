@@ -67,18 +67,14 @@ export class Prueba
       ]
    };
 
-   /*
-   CAMBIAR ESTO EN EL FUTURO
-   */
-   nexts = [0, 0, 0, 0, 0];
-   offset = [0, 0, 0, 0, 0];
+   ideas_bd = [];
+   nexts = [];
+   offset = [];
    max_y_niveles = [];
 
-   NUMERO_NIVELES = 5;
+   NUMERO_NIVELES = 0;
 
    id_proyecto = 2;
-
-   ideas_bd = [];
 
 // -----------------------------------------------------------------------------
 
@@ -96,6 +92,7 @@ export class Prueba
     this.ocultarMenuFlotante();
     //this.dibujaArbol(this.arbol);
     //this.dibujaRamasArbol(this.arbol);
+    //this.maxNivelArbol();
     this.obtenIdeasProyectoBD();
     this.mostrarMenuFlotante();
   }
@@ -334,6 +331,9 @@ export class Prueba
   {
     var lista_ideas = [];
     var i;
+
+    this.ideas_bd = [];
+
     this.ideaService.getIdeasProyecto(this.id_proyecto).then(ideas =>
     {
       lista_ideas = ideas;
@@ -345,25 +345,32 @@ export class Prueba
         var idea =
         {
            id : null,
+           descripcion : '',
+           votos : 0,
+           nivel : 0,
            idMadre : null,
+           idOrigen : null,
+           alias_usuario: '',
            x : 0,
            y : 0,
-           nivel : 0,
-           votos : 0
         };
 
+
+        idea.id = lista_ideas[i].id;
+        idea.descripcion = lista_ideas[i].descripcion;
+        idea.votos = lista_ideas[i].votos;
+        idea.nivel = lista_ideas[i].nivel;
+        idea.idMadre = lista_ideas[i].Idea_id_madre;
+        idea.idOrigen = lista_ideas[i].Idea_id_origen;
+        idea.alias_usuario = lista_ideas[i].Usuario_alias_autor;
         idea.x = 0;
         idea.y = 0;
-        idea.id = lista_ideas[i].id;
-        idea.idMadre = lista_ideas[i].Idea_id_madre;
-        idea.nivel = lista_ideas[i].nivel;
-        idea.votos = lista_ideas[i].votos;
 
         this.ideas_bd.push(idea);
       }
 
-      //console.log('ideas_bd: ');
-      //console.log(this.ideas_bd);
+      console.log('ideas_bd: ');
+      console.log(this.ideas_bd);
 
       this.iniciaEstructuraArbol();
     });
@@ -379,6 +386,41 @@ export class Prueba
     for (var idea in this.ideas_bd)
     {
       if (this.ideas_bd[idea].idMadre == id_idea)
+      {
+        var idea_actual =
+        {
+           id : null,
+           idMadre : null,
+           x : 0,
+           y : 0,
+           nivel : 0,
+           votos : 0
+        };
+
+        idea_actual.id = this.ideas_bd[idea].id;
+        idea_actual.idMadre = this.ideas_bd[idea].idMadre;
+        idea_actual.nivel = this.ideas_bd[idea].nivel;
+        idea_actual.votos = this.ideas_bd[idea].votos;
+        idea_actual.x = this.ideas_bd[idea].x;
+        idea_actual.y = this.ideas_bd[idea].y;
+
+        hijos.push(idea_actual);
+      }
+    }
+
+    return hijos;
+  }
+
+// -----------------------------------------------------------------------------
+
+  ideasBase()
+  {
+    var hijos = [];
+    var i;
+
+    for (var idea in this.ideas_bd)
+    {
+      if (this.ideas_bd[idea].idMadre == null || this.ideas_bd[idea].idOrigen == null )
       {
         var idea_actual =
         {
@@ -475,14 +517,14 @@ export class Prueba
        hijos: [] = []
     };
 
-    arbol.id = 1;
+    arbol.id = 0;
     arbol.idMadre = null;
     arbol.x = 0;
     arbol.y = 0;
     arbol.nivel = 0;
     arbol.votos = 0;
 
-    hijos_idea_actual = this.hijosIdea(arbol.id);
+    hijos_idea_actual = this.ideasBase();
 
     //console.log('hijos_idea_actual: ');
     //console.log(hijos_idea_actual);
@@ -492,7 +534,8 @@ export class Prueba
     //console.log('arbol construido: ');
     //console.log(arbol);
 
-    this.calculaMaxYNiveles();
+    //this.calculaMaxYNiveles();
+    this.datosAuxiliaresIniciales();
 
     this.dibujaArbol(arbol);
     this.dibujaRamasArbol(arbol);
@@ -588,10 +631,6 @@ export class Prueba
 
 // -----------------------------------------------------------------------------
 
-/*
-  LA Y TIENE QUE IR ACUMULANDOSE, AL IGUAL QUE PASA CON LA X. ARREGLAR
-
-*/
   calculaMaxVotosNiveles()
   {
     var votos_niveles = [];
@@ -610,6 +649,8 @@ export class Prueba
 
     return votos_niveles;
   }
+
+// -----------------------------------------------------------------------------
 
   calculaMaxYNiveles()
   {
@@ -633,6 +674,70 @@ export class Prueba
     }
 
     console.log(this.max_y_niveles);
+  }
+
+// -----------------------------------------------------------------------------
+
+  maxNivelArbol()
+  {
+    this.ideaService.getMaxNivelProyecto(this.id_proyecto).then(resultado =>
+    {
+      this.NUMERO_NIVELES = resultado[0].max_nivel;
+      console.log(this.NUMERO_NIVELES);
+    });
+  }
+
+// -----------------------------------------------------------------------------
+
+calculaMaxNivelArbol()
+{
+  var nivel_mayor;
+
+  nivel_mayor = 0;
+
+  for (var idea in this.ideas_bd)
+  {
+    if (this.ideas_bd[idea].nivel > nivel_mayor)
+    {
+      nivel_mayor = this.ideas_bd[idea].nivel;
+    }
+  }
+  console.log('nivel mayor: ' + nivel_mayor);
+  this.NUMERO_NIVELES = nivel_mayor;
+}
+
+// -----------------------------------------------------------------------------
+
+  datosAuxiliaresIniciales()
+  {
+    var i;
+/*
+    this.nexts = [];
+    this.offset = [];
+    this.max_y_niveles = [];
+
+    this.calculaMaxNivelArbol();
+    console.log(this.NUMERO_NIVELES);
+
+    for (i = 0; i < this.NUMERO_NIVELES; i++)
+    {
+      this.nexts.push(0);
+      this.offset.push(0);
+    }
+    */
+
+    this.nexts = [];
+    this.offset = [];
+    this.max_y_niveles = [];
+    this.calculaMaxNivelArbol();
+
+    for (i = 0; i < this.NUMERO_NIVELES; i++)
+    {
+      this.nexts.push(0);
+      this.offset.push(0);
+    }
+
+    this.calculaMaxYNiveles();
   }
 
 }
