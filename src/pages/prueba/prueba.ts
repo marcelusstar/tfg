@@ -73,6 +73,8 @@ export class Prueba
    offset = [0, 0, 0, 0, 0];
    max_y_niveles = [];
 
+   numero_niveles = 0;
+
    id_proyecto = 2;
 
    ideas_bd = [];
