@@ -20,9 +20,9 @@ export class NuevaIdeaPage
   idea =
   {
     descripcion : '',
-    nivel : '0',
-    Idea_id_madre : null,
-    Proyecto_id : '1',
+    nivel : '2',
+    Idea_id_madre : 1,
+    Proyecto_id : '2',
     Usuario_alias_autor : 'guille'
   }
 

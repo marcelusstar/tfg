@@ -18,6 +18,7 @@ export class Prueba
 
   RADIO_CIRCULO_INICIAL = 5;
   ESPACIO_X_ENTRE_NODOS = 20;
+  ESPACIO_Y_ENTRE_NODOS = 20;
 
   nodo =
   {
@@ -73,7 +74,7 @@ export class Prueba
    offset = [0, 0, 0, 0, 0];
    max_y_niveles = [];
 
-   numero_niveles = 0;
+   NUMERO_NIVELES = 5;
 
    id_proyecto = 2;
 
@@ -111,6 +112,17 @@ export class Prueba
     ctx.fillStyle = "black";
     ctx.fill();
     ctx.stroke();
+  }
+
+// -----------------------------------------------------------------------------
+
+  dibujaIdea(x, y, votos)
+  {
+    var radio;
+
+    radio = this.RADIO_CIRCULO_INICIAL * (votos + 1);
+
+    this.dibujaCirculo(x, y, radio);
   }
 
 // -----------------------------------------------------------------------------
@@ -242,6 +254,7 @@ export class Prueba
   dibujaArbol(arbol)
   {
     var place, num_hijos, s;
+    var radio_arbol;
 
     num_hijos = 0;
 
@@ -251,12 +264,23 @@ export class Prueba
       this.dibujaArbol(arbol.hijos[hijo]);
     }
 
-    arbol.y = arbol.nivel * 100;
+    radio_arbol = (arbol.votos +1) * this.RADIO_CIRCULO_INICIAL;
+
+    arbol.y = this.max_y_niveles[arbol.nivel];
 
     if (arbol.hijos == null || num_hijos == 0)
     {
-      place = this.nexts[arbol.nivel];
-      arbol.x = place + 100;
+      if (this.nexts[arbol.nivel] > this.nexts[arbol.nivel - 1])
+        place = this.nexts[arbol.nivel];
+      else
+      {
+        var nivel_actual : number;
+
+        nivel_actual = arbol.nivel;
+
+        place = this.nexts[nivel_actual - 1];
+      }
+      arbol.x = place + radio_arbol;
     }
     else if (num_hijos == 1)
     {
@@ -270,14 +294,14 @@ export class Prueba
 
     this.offset[arbol.nivel] = Math.max(this.offset[arbol.nivel], this.nexts[arbol.nivel] - place);
 
-    if (arbol.hijos != null)
+    if (arbol.hijos != null && num_hijos > 0)
     {
       arbol.x = place + this.offset[arbol.nivel];
     }
 
-    this.nexts[arbol.nivel] += 100;
+    this.nexts[arbol.nivel] = arbol.x + radio_arbol + this.ESPACIO_X_ENTRE_NODOS;
 
-    this.dibujaCirculo(arbol.x, arbol.y, 5);
+    this.dibujaCirculo(arbol.x, arbol.y, radio_arbol);
     this.sustituyeXYIdea(arbol.id, arbol.x, arbol.y);
 
     //console.log("id " + arbol.id);
@@ -492,8 +516,12 @@ export class Prueba
     for (var idea in this.ideas_bd)
     {
       var esta_dentro : boolean;
+      var radio_idea;
 
-      esta_dentro = this.puntoDentroCirculo(this.ideas_bd[idea].x, this.ideas_bd[idea].y, this.RADIO_CIRCULO_INICIAL, click_x, click_y);
+      radio_idea = (this.ideas_bd[idea].votos + 1) * this.RADIO_CIRCULO_INICIAL;
+
+      esta_dentro = this.puntoDentroCirculo(this.ideas_bd[idea].x, this.ideas_bd[idea].y, radio_idea, click_x, click_y);
+      console.log('X,Y: ' + click_x , click_y);
 
       if (esta_dentro == true)
       {
@@ -542,27 +570,66 @@ export class Prueba
 
   calculaMaxVotosIdeaNivel(nivel)
   {
-    var ideas_nivel = [];
+    var votos_ideas_nivel = [];
     for (var idea in this.ideas_bd)
     {
       if (this.ideas_bd[idea].nivel == nivel)
       {
         var num_max_votos : number;
         num_max_votos = this.ideas_bd[idea].votos;
-        ideas_nivel.push(this.ideas_bd[idea].votos);
+        votos_ideas_nivel.push(this.ideas_bd[idea].votos);
       }
     }
 
-    return Math.max(...ideas_nivel);
+    console.log("Maximos voto del nivel: " + nivel);
+    console.log(Math.max(...votos_ideas_nivel));
+    return Math.max(...votos_ideas_nivel);
   }
 
 // -----------------------------------------------------------------------------
 
+/*
+  LA Y TIENE QUE IR ACUMULANDOSE, AL IGUAL QUE PASA CON LA X. ARREGLAR
+
+*/
+  calculaMaxVotosNiveles()
+  {
+    var votos_niveles = [];
+
+    for (var i = 1; i <= this.NUMERO_NIVELES; i++)
+    {
+      var max_votos_nivel ;
+
+      max_votos_nivel = this.calculaMaxVotosIdeaNivel(i);
+
+      votos_niveles.push(max_votos_nivel);
+    }
+
+    console.log("Maximos votos de los niveles");
+    console.log(votos_niveles);
+
+    return votos_niveles;
+  }
+
   calculaMaxYNiveles()
   {
-    for (var i = 1; i < 5; i++)
+    var max_votos_nivel = [];
+
+    max_votos_nivel = this.calculaMaxVotosNiveles();
+
+    this.max_y_niveles.push(20);
+
+    for (var i = 1; i <= this.NUMERO_NIVELES; i++)
     {
-      this.max_y_niveles.push(this.calculaMaxVotosIdeaNivel(i));
+      var y_nivel;
+
+      if (i == 1)
+        y_nivel = this.ESPACIO_Y_ENTRE_NODOS + this.RADIO_CIRCULO_INICIAL * (max_votos_nivel[i - 1] + 1);
+      else
+        y_nivel = this.RADIO_CIRCULO_INICIAL * (max_votos_nivel[i - 2] + 1) + this.ESPACIO_Y_ENTRE_NODOS + this.RADIO_CIRCULO_INICIAL * (max_votos_nivel[i - 1] + 1);
+
+      y_nivel += this.max_y_niveles[i - 1];
+      this.max_y_niveles.push(y_nivel);
     }
 
     console.log(this.max_y_niveles);
