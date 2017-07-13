@@ -18,10 +18,12 @@
       <button ion-fab mini><ion-icon name="arrow-dropdown"></ion-icon></button>
       <ion-fab-list>
         <button ion-fab (click)="createIdea()"><ion-icon name="add" icon="add"></ion-icon></button>
+        <button ion-fab (click)="iniciaEstructuraArbol()"><ion-icon name="brush" icon="brush"></ion-icon></button>
+        <button ion-fab (click)="borraCanvas()"><ion-icon name="snow" icon="snow"></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
 
-  <div id="div_proyecto" (click) = "posicionRaton(event)">
+  <div id="div_proyecto" (click) = "estaClickRatonDentroAlgunaIdea(event)">
     <canvas id="circulo" width="2000" height="1000" style="border:1px solid #d3d3d3;">
       Your browser does not support the canvas element.
     </canvas>
