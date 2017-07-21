@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class ProyectoService
 {
   data: any;
-  apiUrl = 'http://localhost:3000/proyectos';
+  apiUrl = 'http://localhost:3000/proyectos/';
 
   constructor(public http: Http)
   {
@@ -64,6 +64,27 @@ export class ProyectoService
 
 // -----------------------------------------------------------------------------
 
+    getProyectosAutorUsuario(usuario_alias)
+    {
+      if (this.data)
+      {
+        return Promise.resolve(this.data);
+      }
+
+      return new Promise(resolve =>
+      {
+        this.http.get(this.apiUrl+'autor_usuario/:usuario_alias')
+          .map(res => res.json())
+          .subscribe(data =>
+          {
+            this.data = data;
+            resolve(this.data);
+          });
+      });
+    }
+
+// -----------------------------------------------------------------------------
+
     getProyectosUsuario(usuario_alias)
     {
       if (this.data)
@@ -73,7 +94,7 @@ export class ProyectoService
 
       return new Promise(resolve =>
       {
-        this.http.get(this.apiUrl+'usuario/:usuario_alias')
+        this.http.get(this.apiUrl+'usuario/'+usuario_alias)
           .map(res => res.json())
           .subscribe(data =>
           {

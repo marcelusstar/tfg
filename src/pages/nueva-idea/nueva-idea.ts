@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController, Loading, IonicPage } from 'ionic-angular';
+import { NavController, AlertController, LoadingController, Loading, IonicPage, NavParams } from 'ionic-angular';
 import { IdeaService } from '../../providers/idea-service';
 
 /**
@@ -17,11 +17,14 @@ export class NuevaIdeaPage
 {
   loading: Loading;
 
+  idea_madre = null;
+
   idea =
   {
     descripcion : '',
-    nivel : '2',
-    Idea_id_madre : 1,
+    nivel : '1',
+    Idea_id_madre : null,
+    Idea_id_origen : null,
     Proyecto_id : '2',
     Usuario_alias_autor : 'guille'
   }
@@ -30,10 +33,13 @@ export class NuevaIdeaPage
 
   constructor(
               private nav: NavController,
+              private navParams: NavParams,
               private ideaService: IdeaService,
               private alertCtrl: AlertController,
               private loadingCtrl: LoadingController)
   {
+    this.idea_madre =  this.navParams.data;
+    console.log(this.idea_madre);
   }
 
   ionViewDidLoad() {
@@ -44,6 +50,22 @@ export class NuevaIdeaPage
 
   public creaIdea(usuario)
   {
+
+    if (this.idea_madre.id != null && this.idea_madre.id != '')
+    {
+      this.idea.nivel = this.idea_madre.nivel + 1;
+
+      this.idea.Idea_id_madre = this.idea_madre.id;
+      if (this.idea_madre.idOrigen == null)
+      {
+        this.idea.Idea_id_origen = this.idea_madre.id;
+      }
+      else
+      {
+        this.idea.Idea_id_origen = this.idea_madre.idOrigen;
+      }
+    }
+
     this.showLoading();
     this.ideaService.newIdea(this.idea).then((result)=>
     {
@@ -56,7 +78,7 @@ export class NuevaIdeaPage
       }
       else
       {
-        this.showError("Datos incorretos");
+        this.showError("Datos incorrectos");
       }
     },
       (err) =>

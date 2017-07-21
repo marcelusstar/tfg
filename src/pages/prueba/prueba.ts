@@ -15,6 +15,7 @@ import { IdeaService } from '../../providers/idea-service';
 })
 export class Prueba
 {
+  private proyecto;
 
   RADIO_CIRCULO_INICIAL = 5;
   ESPACIO_X_ENTRE_NODOS = 20;
@@ -76,16 +77,34 @@ export class Prueba
 
    id_proyecto = 2;
 
+   idea_seleccionada =
+   {
+      id : null,
+      descripcion : '',
+      votos : 0,
+      nivel : 0,
+      idMadre : null,
+      idOrigen : null,
+      alias_usuario: '',
+      x : 0,
+      y : 0,
+      id_proyecto : 2
+   };
+
 // -----------------------------------------------------------------------------
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private ideaService: IdeaService,)
+  constructor(public navCtrl: NavController, public navParams: NavParams, private ideaService: IdeaService)
   {
-
+    console.log("Proyecto");
+    console.log(this.proyecto);
+    //window.location.reload();
+    //this.obtenIdeasProyectoBD();
   }
 
 // -----------------------------------------------------------------------------
 
-  ionViewDidLoad() {
+  ionViewDidLoad()
+  {
     console.log('ionViewDidLoad Prueba');
     //this.dibujaCirculo(50, 50, 5);
     this.crearCanvas();
@@ -93,9 +112,24 @@ export class Prueba
     //this.dibujaArbol(this.arbol);
     //this.dibujaRamasArbol(this.arbol);
     //this.maxNivelArbol();
-    this.obtenIdeasProyectoBD();
+    //this.obtenIdeasProyectoBD();
     this.mostrarMenuFlotante();
   }
+
+  ionViewDidEnter()
+  {
+    this.ideas_bd = [];
+    this.obtenIdeasProyectoBD();
+  }
+
+
+  ionViewWillLeave()
+  {
+    console.log("Looks like I'm about to leave :(");
+    this.borrarCanvas();
+    this.ideas_bd = [];
+  }
+
 
 // -----------------------------------------------------------------------------
 
@@ -205,6 +239,19 @@ export class Prueba
 
 // -----------------------------------------------------------------------------
 
+  borrarCanvas()
+  {
+    var canvas = <HTMLCanvasElement>document.getElementById('circulo');
+    var ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.nexts = [0, 0, 0];
+    this.offset = [0, 0, 0];
+  }
+
+
+// -----------------------------------------------------------------------------
+
   mostrarMenuFlotante()
   {
     var menu_flotante = document.getElementById("menu_flotante");
@@ -226,7 +273,7 @@ export class Prueba
   public createIdea()
   {
     //console.log('createIdea');
-    this.navCtrl.push('NuevaIdeaPage');
+    this.navCtrl.push('NuevaIdeaPage', this.idea_seleccionada);
   }
 
 // -----------------------------------------------------------------------------
@@ -261,7 +308,7 @@ export class Prueba
       this.dibujaArbol(arbol.hijos[hijo]);
     }
 
-    radio_arbol = (arbol.votos +1) * this.RADIO_CIRCULO_INICIAL;
+    radio_arbol = (arbol.votos + 1) * this.RADIO_CIRCULO_INICIAL;
 
     arbol.y = this.max_y_niveles[arbol.nivel];
 
@@ -332,9 +379,10 @@ export class Prueba
     var lista_ideas = [];
     var i;
 
-    this.ideas_bd = [];
+    this.proyecto = [];
+    this.proyecto = this.navParams.data;
 
-    this.ideaService.getIdeasProyecto(this.id_proyecto).then(ideas =>
+    this.ideaService.getIdeasProyecto(this.proyecto.id).then(ideas =>
     {
       lista_ideas = ideas;
       //console.log('lista_ideas: ');
@@ -553,7 +601,7 @@ export class Prueba
   }
 
 // -----------------------------------------------------------------------------
-
+// REVISAR ESTE MODULO
   clickDentroAlgunaIdea(click_x, click_y)
   {
     for (var idea in this.ideas_bd)
@@ -569,7 +617,34 @@ export class Prueba
       if (esta_dentro == true)
       {
         console.log('Esta dentro de la idea de id: ' + this.ideas_bd[idea].id);
+
+        this.idea_seleccionada.id = this.ideas_bd[idea].id;
+        this.idea_seleccionada.idOrigen = this.ideas_bd[idea].idOrigen;
+        this.idea_seleccionada.nivel = this.ideas_bd[idea].nivel;
+        console.log(this.idea_seleccionada);
+
+        var canvas = <HTMLCanvasElement>document.getElementById('circulo');
+        var ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+
+        ctx.beginPath();
+        ctx.arc(this.ideas_bd[idea].x, this.ideas_bd[idea].y, radio_idea, 0, 2 * Math.PI);//arc(x,y,r,startangle,endangle)
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.stroke();
+
         break;
+      }
+      else
+      {
+        this.idea_seleccionada.id = null;
+        var canvas = <HTMLCanvasElement>document.getElementById('circulo');
+        var ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+
+        ctx.beginPath();
+        ctx.arc(this.ideas_bd[idea].x, this.ideas_bd[idea].y, radio_idea, 0, 2 * Math.PI);//arc(x,y,r,startangle,endangle)
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.stroke();
       }
 
     }
@@ -738,6 +813,13 @@ calculaMaxNivelArbol()
     }
 
     this.calculaMaxYNiveles();
+  }
+
+// -----------------------------------------------------------------------------
+
+  goBack() {
+    console.log("popping");
+    this.navCtrl.pop();
   }
 
 }
