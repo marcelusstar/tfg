@@ -37,7 +37,7 @@ export class LoginPage
     {
       if (JSON.stringify(result) != JSON.stringify([]))
       {
-        this.nav.setRoot('HomePage');
+        this.nav.setRoot('ProyectosPage');
         console.log(this.usuario);
         console.log(JSON.stringify([]));
         console.log(JSON.stringify(result));

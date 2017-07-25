@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, Loading, IonicPage, NavParams } from 'ionic-angular';
 import { IdeaService } from '../../providers/idea-service';
+import { UserService } from '../../providers/user-service';
 
 /**
  * Generated class for the NuevaIdea page.
@@ -29,6 +30,8 @@ export class NuevaIdeaPage
     Usuario_alias_autor : 'guille'
   }
 
+  alias_usuario = '';
+
   ideaCreada = false;
 
   constructor(
@@ -36,9 +39,15 @@ export class NuevaIdeaPage
               private navParams: NavParams,
               private ideaService: IdeaService,
               private alertCtrl: AlertController,
-              private loadingCtrl: LoadingController)
+              private loadingCtrl: LoadingController,
+              private userService: UserService)
   {
     this.idea_madre =  this.navParams.data;
+    this.alias_usuario = this.userService.aliasUsuarioLogueado();
+    this.idea.Usuario_alias_autor = this.alias_usuario;
+    this.idea.Proyecto_id = this.idea_madre.id_proyecto;
+    console.log("Idea madre");
+    console.log()
     console.log(this.idea_madre);
   }
 

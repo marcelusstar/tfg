@@ -24,11 +24,6 @@ export class ProyectoService
 
     getProyectos()
     {
-      if (this.data)
-      {
-        return Promise.resolve(this.data);
-      }
-
       return new Promise(resolve =>
       {
         this.http.get(this.apiUrl)
@@ -45,11 +40,6 @@ export class ProyectoService
 
   getProyecto(id)
   {
-    if (this.data)
-    {
-      return Promise.resolve(this.data);
-    }
-
     return new Promise(resolve =>
     {
       this.http.get(this.apiUrl+'/:id')
@@ -66,11 +56,6 @@ export class ProyectoService
 
     getProyectosAutorUsuario(usuario_alias)
     {
-      if (this.data)
-      {
-        return Promise.resolve(this.data);
-      }
-
       return new Promise(resolve =>
       {
         this.http.get(this.apiUrl+'autor_usuario/:usuario_alias')
@@ -87,11 +72,6 @@ export class ProyectoService
 
     getProyectosUsuario(usuario_alias)
     {
-      if (this.data)
-      {
-        return Promise.resolve(this.data);
-      }
-
       return new Promise(resolve =>
       {
         this.http.get(this.apiUrl+'usuario/'+usuario_alias)
@@ -122,6 +102,22 @@ export class ProyectoService
           }, (err) =>
           {
             reject(err);
+          });
+      });
+    }
+
+// -----------------------------------------------------------------------------
+
+    getUltimoProyecto()
+    {
+      return new Promise(resolve =>
+      {
+        this.http.get(this.apiUrl+'ultimo/proyecto')
+          .map(res => res.json())
+          .subscribe(data =>
+          {
+            this.data = data;
+            resolve(this.data);
           });
       });
     }

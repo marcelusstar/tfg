@@ -68,7 +68,16 @@ export class IdeaService
   {
     if (this.data)
     {
-      return Promise.resolve(this.data);
+      return new Promise(resolve =>
+      {
+        this.http.get(this.apiUrl + '/proyecto/' + id_proyecto)
+          .map(res => res.json())
+          .subscribe(data =>
+          {
+            this.data = data;
+            resolve(this.data);
+          });
+      });
     }
 
     return new Promise(resolve =>

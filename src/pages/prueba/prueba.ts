@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { IdeaService } from '../../providers/idea-service';
+import { UserService } from '../../providers/user-service';
 
 /**
  * Generated class for the Prueba page.
@@ -91,12 +92,15 @@ export class Prueba
       id_proyecto : 2
    };
 
+   alias_usuario = '';
+
 // -----------------------------------------------------------------------------
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private ideaService: IdeaService)
+  constructor(public navCtrl: NavController, public navParams: NavParams, private ideaService: IdeaService, private userService: UserService)
   {
     console.log("Proyecto");
     console.log(this.proyecto);
+
     //window.location.reload();
     //this.obtenIdeasProyectoBD();
   }
@@ -118,6 +122,7 @@ export class Prueba
 
   ionViewDidEnter()
   {
+    this.alias_usuario = this.userService.aliasUsuarioLogueado();
     this.ideas_bd = [];
     this.obtenIdeasProyectoBD();
   }
@@ -376,11 +381,13 @@ export class Prueba
 
   obtenIdeasProyectoBD()
   {
-    var lista_ideas = [];
+    var lista_ideas;
     var i;
 
     this.proyecto = [];
     this.proyecto = this.navParams.data;
+
+    this.idea_seleccionada.id_proyecto = this.proyecto.id;
 
     this.ideaService.getIdeasProyecto(this.proyecto.id).then(ideas =>
     {

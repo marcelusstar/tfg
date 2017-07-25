@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProyectoService } from '../../providers/proyecto-service';
+import { UserService } from '../../providers/user-service';
 
 /**
  * Generated class for the Proyectos page.
@@ -15,7 +16,8 @@ import { ProyectoService } from '../../providers/proyecto-service';
 })
 export class ProyectosPage {
 
-  usuario = 'marcelo';
+  alias_usuario = '';
+  usuario_logueado = false;
   proyectos : any;
   /*
   estructura :
@@ -30,13 +32,21 @@ export class ProyectosPage {
   }
   */
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private proyectoService: ProyectoService)
+  constructor(public navCtrl: NavController, public navParams: NavParams, private proyectoService: ProyectoService, private userService: UserService)
   {
-    this.getProyectrosUsuario(this.usuario);
+
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Proyectos');
+  }
+
+  ionViewDidEnter()
+  {
+    this.alias_usuario = this.userService.aliasUsuarioLogueado();
+    console.log(this.alias_usuario);
+    this.getProyectrosUsuario(this.alias_usuario);
   }
 
 // -----------------------------------------------------------------------------
@@ -87,6 +97,13 @@ export class ProyectosPage {
     //var h = this.navCtrl.getActiveChildNav();
 
 
+  }
+
+// -----------------------------------------------------------------------------
+
+  public createProyecto()
+  {
+    this.navCtrl.push('NuevoProyectoPage');
   }
 
 }

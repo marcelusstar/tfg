@@ -88,7 +88,9 @@ export class UserService
         .map(res => res.json())
         .subscribe(data =>
         {
-          this.usuarioActual = new Usuario(data.alias);
+          this.usuarioActual = new Usuario(usuario.alias);
+          console.log("Usuario actual");
+          console.log(this.usuarioActual);
           console.log(JSON.stringify(data));
           resolve(data);
         }, (err) =>
@@ -110,11 +112,18 @@ export class UserService
 
 // -----------------------------------------------------------------------------
 
-    usuarioLogueado()
-    {
-      if (this.usuarioActual != null)
-        return true;
-    }
+  usuarioEstaLogueado()
+  {
+    if (this.usuarioActual != null)
+      return true;
+  }
+
+// -----------------------------------------------------------------------------
+
+  aliasUsuarioLogueado()
+  {
+    return this.usuarioActual.alias;
+  }
 
 // -----------------------------------------------------------------------------
 
@@ -169,6 +178,28 @@ getOrganizaciones()
     return new Promise((resolve, reject) =>
     {
       this.http.post('http://localhost:3000/usuarios/organizacion', data, headers)
+        .map(res => res.json())
+        .subscribe(data =>
+        {
+          console.log(JSON.stringify(data));
+          resolve(data);
+        }, (err) =>
+        {
+          reject(err);
+        });
+    });
+  }
+
+// -----------------------------------------------------------------------------
+
+  addUsuarioAProyecto(data)
+  {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return new Promise((resolve, reject) =>
+    {
+      this.http.post('http://localhost:3000/usuarios/proyecto', data, headers)
         .map(res => res.json())
         .subscribe(data =>
         {
