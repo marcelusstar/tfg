@@ -6,17 +6,19 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>registro</ion-title>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+      <ion-title>Registro</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content class="login-content" padding>
+<ion-content class="login-content">
   <div class="login-box">
 
-  <h2>Add User</h2>
   <form (ngSubmit)="newUsuario()" #registerForm="ngForm">
     <ion-row>
         <ion-col>
@@ -33,21 +35,21 @@
           </ion-item>
 
           <ion-item>
-            <ion-label>Username</ion-label>
+            <ion-label>Alias</ion-label>
             <ion-input type="text" [(ngModel)]="usuario.alias" name="alias" required></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label>Contrasena</ion-label>
+            <ion-label>Contraseña</ion-label>
             <ion-input type="password" [(ngModel)]="usuario.contrasena" name="contrasena" required></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label>Organizaciones</ion-label>
-            <ion-select [(ngModel)]="organizacionesSeleccionadas" name="algo" multiple="true" cancelText="No!" okText="Okay!">
+            <ion-select [(ngModel)]="organizacionesSeleccionadas" name="algo" multiple="true" okText="Aceptar" cancelText="Cancelar" >
               <ion-option *ngFor="let organizacion of organizaciones" [value]="organizacion.id" required>{{organizacion.nombre}}</ion-option>
             </ion-select>
-         </ion-item>
+          </ion-item>
 
         </ion-list>
       </ion-col>
@@ -55,7 +57,7 @@
 
     <ion-row>
         <ion-col class="signup-col">
-              <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Registro</button>
+              <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Registrarse</button>
         </ion-col>
       </ion-row>
 

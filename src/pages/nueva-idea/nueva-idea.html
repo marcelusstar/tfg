@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
 
   <div class="login-box">
     <form (ngSubmit)="creaIdea()" #registerForm="ngForm">
@@ -22,8 +22,13 @@
             <ion-list inset>
 
               <ion-item>
-                <ion-label>Descripcion</ion-label>
-                <ion-textarea placeholder="Descripcion del proyecto" name="descripcion" [(ngModel)]="idea.descripcion" required></ion-textarea>
+                <ion-label>Nombre</ion-label>
+                <ion-input type="text" placeholder="Nombre idea" name="nombre"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Descripción</ion-label>
+                <ion-textarea placeholder="Descripcion de la idea" name="descripcion" [(ngModel)]="idea.descripcion" required></ion-textarea>
               </ion-item>
 
             </ion-list>

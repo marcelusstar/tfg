@@ -1,1 +1,24 @@
+
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+
+      <button ion-item menuClose (click)="goProyectos()">
+        Product list
+      </button>
+
+      <button ion-item menuClose (click)="logout()">
+        Logout
+      </button>
+
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
 <ion-nav [root]="rootPage"></ion-nav>

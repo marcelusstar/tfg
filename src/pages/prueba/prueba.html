@@ -7,20 +7,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Proyecto ideas</ion-title>
+    <ion-title>Proyecto</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
 
-    <ion-fab top right edge id="menu_flotante">
+    <ion-fab down right edge id="menu_flotante">
       <button ion-fab mini><ion-icon name="arrow-dropdown"></ion-icon></button>
       <ion-fab-list>
         <button ion-fab (click)="createIdea()"><ion-icon name="add" icon="add"></ion-icon></button>
-        <button ion-fab (click)="obtenIdeasProyectoBD()"><ion-icon name="brush" icon="brush"></ion-icon></button>
-        <button ion-fab (click)="borraCanvas()"><ion-icon name="snow" icon="snow"></ion-icon></button>
-        <button ion-fab (click)="goBack()"><ion-icon name="snow" icon="snow"></ion-icon></button>
+        <button ion-fab><ion-icon name="information-circle-outline" icon="information-circle-outline"></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
 

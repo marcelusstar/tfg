@@ -16,7 +16,7 @@ import { UserService } from '../../providers/user-service';
 })
 export class Prueba
 {
-  private proyecto;
+  public proyecto;
 
   RADIO_CIRCULO_INICIAL = 5;
   ESPACIO_X_ENTRE_NODOS = 20;
@@ -630,6 +630,7 @@ export class Prueba
         this.idea_seleccionada.nivel = this.ideas_bd[idea].nivel;
         console.log(this.idea_seleccionada);
 
+/*
         var canvas = <HTMLCanvasElement>document.getElementById('circulo');
         var ctx: CanvasRenderingContext2D = canvas.getContext("2d");
 
@@ -638,6 +639,9 @@ export class Prueba
         ctx.fillStyle = "red";
         ctx.fill();
         ctx.stroke();
+        */
+
+        this.navCtrl.push('VistaIdea');
 
         break;
       }

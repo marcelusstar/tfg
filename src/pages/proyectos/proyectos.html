@@ -6,26 +6,25 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>proyectos</ion-title>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+      <ion-title>proyectos</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 
-  <ion-fab top right edge id="menu_flotante">
+  <ion-fab down right edge id="menu_flotante">
     <button ion-fab (click)="createProyecto()"><ion-icon name="add" icon = "add"></ion-icon></button>
   </ion-fab>
 
   <ion-list>
-    <ion-item *ngFor="let proyecto of proyectos">
-      <button ion-button clear (click)="verProyecto(proyecto)">
-      Nombre:\n
-      {{proyecto.nombre}}
-      Descripcion:\n
-      {{proyecto.descripcion}}
-      </button>
+    <ion-item *ngFor="let proyecto of proyectos" (click)="verProyecto(proyecto)">
+        <p>{{proyecto.nombre}}</p>
+        <p>{{proyecto.descripcion}}</p>
     </ion-item>
   </ion-list>
 

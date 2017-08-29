@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
   <div class="login-box">
     <form (ngSubmit)="creaProyecto()" #registerForm="ngForm">
@@ -29,6 +29,32 @@
               <ion-item>
                 <ion-label>Descripcion</ion-label>
                 <ion-textarea placeholder="Descripcion del proyecto" name="descripcion" [(ngModel)]="proyecto.descripcion" required></ion-textarea>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Organización</ion-label>
+                <ion-select name="algo" multiple="true" okText="Aceptar" cancelText="Cancelar">
+                  <ion-option value="f">Equipo rojo</ion-option>
+                  <ion-option value="g">Rocket</ion-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Usuarios participantes</ion-label>
+                <ion-select name="algo" multiple="true" okText="Aceptar" cancelText="Cancelar">
+                  <ion-option value="m">Marina</ion-option>
+                  <ion-option value="a">Alex</ion-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Fecha inicio</ion-label>
+                <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD MMMM YYYY"></ion-datetime>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Fecha fin</ion-label>
+                <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD MMMM YYYY"></ion-datetime>
               </ion-item>
 
             </ion-list>

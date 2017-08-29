@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -8,10 +8,13 @@ import { LoginPage } from '../pages/login/login';
 import { RegistroPage } from '../pages/registro/registro';
 import { Prueba } from '../pages/prueba/prueba';
 import { ProyectosPage } from '../pages/proyectos/proyectos';
+
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild(Nav) nav: Nav;// Reference to the ion-nav element
   rootPage:any = 'LoginPage';
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -22,4 +25,14 @@ export class MyApp {
       splashScreen.hide();
     });
   }
+
+  goProducts() {
+    this.nav.push(ProyectosPage); // Using the Nav as a NavController
+  }
+
+  logout()
+  {
+    this.nav.setRoot('LoginPage');
+  }
+
 }

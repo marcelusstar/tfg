@@ -6,14 +6,24 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>login</ion-title>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+      <ion-title>Bienvenid@</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+  <div style="margin: 0px; line-height: 250px; background-color: rgb(232, 235, 239); text-align: center;">
+        <i class="icon ion-image" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle;">
+          <ion-img src="../assets/bombilla.png"></ion-img>
+        </i>
+  </div>
+
 
   <div class="login-box">
     <form (ngSubmit)="loginUsuario()" #registerForm="ngForm">
@@ -38,7 +48,7 @@
         <ion-row>
           <ion-col class="signup-col">
             <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>
-            <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>
+            <button ion-button class="register-btn" block clear (click)="createAccount()">Crear cuenta</button>
           </ion-col>
         </ion-row>
 

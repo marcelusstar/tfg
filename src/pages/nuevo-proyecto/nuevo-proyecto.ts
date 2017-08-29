@@ -23,10 +23,12 @@ export class NuevoProyectoPage {
     nombre: '',
     descripcion: '',
     anonimato: 0,
-    fecha_inicio : null,
-    fecha_fin : null,
+    fecha_inicio : '',
+    fecha_fin : '',
     Usuario_alias_autor : ''
   }
+
+  fecha = new Date(2010, 11, 28, 14, 57);
 
   alias_usuario = '';
 
