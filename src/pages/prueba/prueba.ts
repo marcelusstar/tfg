@@ -641,7 +641,7 @@ export class Prueba
         ctx.stroke();
         */
 
-        this.navCtrl.push('VistaIdea');
+        this.navCtrl.push('SeleccionProyectos');
 
         break;
       }
